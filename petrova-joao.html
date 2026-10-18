@@ -1,0 +1,654 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>Português — карточки</title>
+<style>:root{color-scheme:light dark;--bg:#f5f7f8;--card:#fff;--tx:#192620;--mut:#5e6e65;--ac:#176b43;--onac:#fff;--bd:#ccd8d0;--ok:#e0f4e7;--bad:#fde7e4;--badtx:#a12720;--warn:#fff1d1}
+@media(prefers-color-scheme:dark){:root{--bg:#131b17;--card:#1d2922;--tx:#edf5ef;--mut:#adbfb1;--ac:#6ed69a;--onac:#10291a;--bd:#415448;--ok:#20432c;--bad:#512b29;--badtx:#ffb3a8;--warn:#463a21}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--tx);font:17px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
+main{max-width:760px;padding:18px;margin:auto}h1{font-size:25px;line-height:1.2;margin:10px 0}h2{font-size:20px;margin:14px 0 6px}p{margin:8px 0 14px}button,select,input{font:inherit;color:inherit}button,select{min-height:46px;border:1px solid var(--bd);border-radius:12px;padding:10px 14px;background:var(--card)}button{cursor:pointer}button:hover:not(:disabled){border-color:var(--ac)}button:disabled{opacity:.55;cursor:default}:focus-visible{outline:3px solid var(--ac);outline-offset:3px}button.primary{background:var(--ac);color:var(--onac);border-color:var(--ac);font-weight:650}button.link{border:0;background:none;padding-left:0;padding-right:0;color:var(--ac)}button.wide{width:100%}.muted,small{color:var(--mut)}small{font-size:13px}.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}.row>*{min-width:0}.split{justify-content:space-between}.segments{display:flex;gap:8px;margin:12px 0}.segments button{flex:1}.segments [aria-pressed=true]{background:var(--ac);color:var(--onac);border-color:var(--ac)}.controls{display:flex;gap:12px;flex-wrap:wrap;margin:14px 0}.controls label{display:flex;flex:1 1 150px;flex-direction:column;gap:5px;font-size:14px}.controls select{width:100%}.panel{border:1px solid var(--bd);background:var(--card);border-radius:16px;padding:16px;margin:14px 0}.notice{background:var(--warn);border-radius:12px;padding:12px;font-size:15px;overflow-wrap:anywhere;margin:10px 0}.status:empty{display:none}.status{font-size:15px;overflow-wrap:anywhere}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin:16px 0}.lesson-tile{border:1px solid var(--bd);background:var(--card);border-radius:16px;padding:13px;display:flex;flex-direction:column;gap:8px}.lesson-title{min-height:45px;font-size:15px;overflow-wrap:anywhere}.lesson-tile button{text-align:left;font-weight:650}.include{display:flex;gap:8px;align-items:center;font-size:13px;color:var(--mut);min-height:40px}.include input{width:20px;height:20px;accent-color:var(--ac)}.word{background:var(--card);border:1px solid var(--bd);border-radius:20px;padding:28px 16px;text-align:center;font-size:32px;font-weight:700;overflow-wrap:anywhere;margin:12px 0 18px}.options{display:grid;gap:10px}.option{width:100%;text-align:left;min-height:58px;font-size:18px}.option.good{background:var(--ok);border:2px solid var(--ac);opacity:1}.option.bad{background:var(--bad);border:2px solid var(--badtx);opacity:1}.feedback{padding:14px;border-radius:12px;margin:14px 0;overflow-wrap:anywhere}.feedback.good{background:var(--ok)}.feedback.bad{background:var(--bad)}.progress{height:7px;background:var(--bd);border-radius:5px;overflow:hidden;margin:8px 0 12px}.progress span{display:block;background:var(--ac);height:100%;width:0}#answer-word{font-size:24px;font-weight:650;overflow-wrap:anywhere}.big{font-size:48px;font-weight:700}.missed{padding-left:22px}.missed li{margin:10px 0;overflow-wrap:anywhere}.actions{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0}.actions button{flex:1 1 180px}details{margin:15px 0}summary{cursor:pointer;min-height:40px;color:var(--ac)}kbd{border:1px solid var(--bd);border-radius:4px;padding:1px 5px}.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}[hidden]{display:none!important}
+.grid{grid-template-columns:repeat(auto-fit,minmax(140px,1fr))}select{max-width:100%}
+@media(max-width:380px){main{padding:12px}.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.segments button{padding:10px 8px;font-size:15px}.word{font-size:28px}}
+@media(prefers-reduced-motion:no-preference){.progress span{transition:width .15s}}
+</style>
+</head>
+<body>
+<main>
+<div class="row split"><small>Português · карточки</small><button id="export">Сохранить JSON</button></div>
+<div id="storage-warning" class="notice" role="alert" hidden></div>
+<div id="data-warning" class="notice" role="status" hidden></div>
+<p id="message" class="status" role="status" aria-live="polite"></p>
+<section id="home" aria-labelledby="home-title">
+  <h1 id="home-title" tabindex="-1">Português do Brasil</h1>
+  <p id="deck-detail" class="muted"></p>
+  <div class="segments" aria-label="Направление перевода">
+    <button id="d0" aria-pressed="true">PT → RU</button>
+    <button id="d1" aria-pressed="false">RU → PT</button>
+  </div>
+  <details><summary id="settings-summary">Настройки: по расписанию · 20 карточек</summary><div class="controls">
+    <label>Режим<select id="mode"><option value="review">По расписанию</option><option value="practice">Свободная тренировка</option></select></label>
+    <label>Ответ<select id="answer-mode"><option value="choice">4 варианта</option><option value="recall">Вспомнить самому</option></select></label>
+    <label>Карточек за сессию<select id="limit"><option>10</option><option selected>20</option><option>40</option></select></label>
+  </div></details>
+  <div id="common-panel" class="panel" hidden>
+    <h2>Общая очередь</h2>
+    <p id="overall" class="muted"></p>
+    <button id="start-all" class="primary wide">Начать повторение</button>
+    <p><small>Общая очередь включает только отмеченные ниже уроки. Любой урок можно открыть отдельно.</small></p>
+  </div>
+  <div id="legacy-note" class="notice" hidden></div>
+  <h2>Уроки</h2>
+  <p><small>Откройте урок для тренировки. Отмеченные уроки включаются в общую очередь.</small></p>
+  <div id="grid" class="grid"></div>
+  <details><summary>Перенос и резервные копии</summary>
+  <div class="actions"><button id="import">Загрузить JSON</button></div>
+  <label>При загрузке копии <select id="import-mode"><option value="merge">Объединить ответы</option><option value="replace">Заменить текущие результаты</option></select></label>
+  <input type="file" id="import-file" accept=".json,application/json" hidden>
+  <p><small>«Объединить» добавляет ответы без удаления имеющихся. «Заменить» восстанавливает состояние копии, в том числе до сброса. Настройки тренировки и выбранные уроки остаются текущими.</small></p>
+  </details>
+  <details><summary>Как работают повторения и сохранение</summary>
+    <p>При правильном ответе следующий повтор назначается через 1, 3, 7, 14 или 30 дней по мере продвижения. После ошибки — через 10 минут. Сначала идут просроченные карточки, затем новые.</p>
+    <p>Направления перевода учитываются отдельно. Свободная тренировка не меняет расписание. «Закреплено» означает три или больше успешных этапов повторения, а не окончательное знание слова.</p>
+    <p>Прогресс сохраняется в этом браузере. Регулярно сохраняйте JSON; для переноса в другой браузер загрузите эту копию. В приватном режиме или после очистки данных браузера прогресс может исчезнуть.</p>
+    <p>После обновления файла прежние коробки сохраняются отдельно, если браузер предоставляет старое хранилище. Без дат и направления они не превращаются в новый результат.</p>
+  </details>
+  <noscript><p class="notice">Для карточек нужен JavaScript. Откройте HTML в браузере, который запускает скрипты.</p></noscript>
+</section>
+<section id="quiz" aria-labelledby="q" hidden>
+  <div class="row split"><button id="back" class="link">← К урокам</button><button id="finish" class="link">Завершить сессию</button></div>
+  <p id="session-title" class="muted"></p>
+  <p id="session-progress"></p>
+  <div class="progress" role="progressbar" aria-label="Прогресс сессии" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="session-bar"><span id="pbar"></span></div>
+  <p id="source" class="muted"></p>
+  <h1 class="word" id="q" tabindex="-1" aria-describedby="sense source"></h1>
+  <p id="sense" class="muted" hidden></p>
+  <div id="opts" class="options"></div>
+  <div id="recall" hidden>
+    <button id="show-answer" class="primary wide">Показать ответ</button>
+    <div id="recall-answer" class="panel" hidden><p id="answer-word"></p><div class="actions"><button id="forgot">Не вспомнил</button><button id="remembered">Вспомнил</button></div></div>
+  </div>
+  <div id="feedback" class="feedback" aria-live="polite" aria-atomic="true" hidden></div>
+  <button id="next" class="primary wide" hidden>Дальше</button>
+  <p><small id="keyboard-help">Клавиши 1–4 — ответ. Enter или пробел вне кнопок — дальше.</small></p>
+  <details><summary>Сброс прогресса</summary><p>Сброс удаляет результаты выбранного урока в обоих направлениях и завершает текущую сессию. Сначала можно сохранить JSON.</p><button id="reset">Сбросить этот урок</button></details>
+</section>
+<section id="res" aria-labelledby="result-title" hidden>
+  <h1 id="result-title" tabindex="-1">Результат сессии</h1>
+  <p class="big" id="pct"></p>
+  <p id="result-detail"></p>
+  <p id="result-mode" class="muted"></p>
+  <h2 id="miss-title" hidden>Ошибки этой сессии</h2>
+  <ul id="missed" class="missed"></ul>
+  <div class="actions"><button id="retry" hidden>Повторить ошибки</button><button id="continue" class="primary">Следующая сессия</button><button id="tohome">К урокам</button></div>
+</section>
+</main>
+<script>window.PT_DECK={"schemaVersion":1,"id":"petrova-joao","materialId":"MAT-002","language":"pt-BR","sourceLanguage":"pt-PT","variantLabel":"Бразильская адаптация европейского учебника","title":"Петрова и Жоау · карточки pt-BR","coverage":"starter-selection","lessons":[{"id":1,"title":"Вводная фонетика. Простые фразы","titleLang":"ru","printedPage":9,"pdfPage":11,"status":"curated-starter","cards":[{"id":"P001-W001","pt":"vida","ru":"жизнь","source":{"pdfPage":22,"printedPage":20,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"vida","ru":"жизнь"},"selection":"agent-curated"},{"id":"P001-W002","pt":"vasto","ru":"просторный","source":{"pdfPage":22,"printedPage":20,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"vasto","ru":"просторный"},"selection":"agent-curated"},{"id":"P001-W003","pt":"tolo","ru":"глупый","source":{"pdfPage":22,"printedPage":20,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"tolo","ru":"глупый"},"selection":"agent-curated"},{"id":"P001-W004","pt":"louco","ru":"безумный","source":{"pdfPage":22,"printedPage":20,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"louco","ru":"безумный"},"selection":"agent-curated"},{"id":"P001-W005","pt":"modo","ru":"способ","source":{"pdfPage":22,"printedPage":20,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"modo","ru":"способ"},"selection":"agent-curated"},{"id":"P001-W006","pt":"cômodo","ru":"удобный","source":{"pdfPage":22,"printedPage":20,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"cómodo","ru":"удобный"},"selection":"agent-curated","adaptationId":"BR-001"},{"id":"P001-W007","pt":"amar","ru":"любить","source":{"pdfPage":22,"printedPage":20,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"amar","ru":"любить"},"selection":"agent-curated"},{"id":"P001-W008","pt":"meditar","ru":"размышлять","source":{"pdfPage":22,"printedPage":20,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"meditar","ru":"размышлять"},"selection":"agent-curated"},{"id":"P001-W009","pt":"hora","ru":"час","source":{"pdfPage":23,"printedPage":21,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"hora","ru":"час"},"selection":"agent-curated"},{"id":"P001-W010","pt":"aula","ru":"занятие","source":{"pdfPage":23,"printedPage":21,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"aula","ru":"занятие"},"selection":"agent-curated"},{"id":"P001-W011","pt":"flor","ru":"цветок","source":{"pdfPage":23,"printedPage":21,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"flor","ru":"цветок"},"selection":"agent-curated"},{"id":"P001-W012","pt":"banho","ru":"душ","source":{"pdfPage":23,"printedPage":21,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"banho","ru":"душ"},"selection":"agent-curated"}]},{"id":2,"title":"Внешность, национальность и учёба","titleLang":"ru","printedPage":23,"pdfPage":25,"status":"curated-starter","cards":[{"id":"P002-W001","pt":"nome","ru":"имя","source":{"pdfPage":37,"printedPage":35,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"nome","ru":"имя"},"selection":"agent-curated"},{"id":"P002-W002","pt":"curso","ru":"курс","source":{"pdfPage":37,"printedPage":35,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"curso","ru":"курс"},"selection":"agent-curated"},{"id":"P002-W003","pt":"cidade","ru":"город","source":{"pdfPage":37,"printedPage":35,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"cidade","ru":"город"},"selection":"agent-curated"},{"id":"P002-W004","pt":"capital","ru":"столица","source":{"pdfPage":37,"printedPage":35,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"capital","ru":"столица"},"selection":"agent-curated","partOfSpeech":"существительное, женский род","examplePt":"Lisboa é a capital de Portugal.","exampleRu":"Лиссабон — столица Португалии."},{"id":"P002-W005","pt":"turma","ru":"учебная группа","source":{"pdfPage":37,"printedPage":35,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"turma","ru":"учебная группа"},"selection":"agent-curated"},{"id":"P002-W006","pt":"país","ru":"страна","source":{"pdfPage":37,"printedPage":35,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"país","ru":"страна"},"selection":"agent-curated"},{"id":"P002-W007","pt":"dar uma volta","ru":"прогуляться","source":{"pdfPage":37,"printedPage":35,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"dar uma volta","ru":"прогуляться"},"selection":"agent-curated"},{"id":"P002-W008","pt":"pai","ru":"отец","source":{"pdfPage":37,"printedPage":35,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"pai","ru":"отец"},"selection":"agent-curated"},{"id":"P002-W009","pt":"alto","ru":"высокий","source":{"pdfPage":37,"printedPage":35,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"alto","ru":"высокий"},"selection":"agent-curated"},{"id":"P002-W010","pt":"magro","ru":"худой","source":{"pdfPage":37,"printedPage":35,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"magro","ru":"худой"},"selection":"agent-curated"},{"id":"P002-W011","pt":"cabelo","ru":"волосы","source":{"pdfPage":37,"printedPage":35,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"cabelo","ru":"волосы"},"selection":"agent-curated"},{"id":"P002-W012","pt":"castanho","ru":"каштановый, карий","source":{"pdfPage":37,"printedPage":35,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"castanho","ru":"каштановый, карий"},"selection":"agent-curated"},{"id":"P002-W013","pt":"gordo","ru":"толстый (о телосложении)","source":{"pdfPage":37,"printedPage":35,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"gordo","ru":"толстый (о телосложении)"},"selection":"agent-curated"},{"id":"P002-W014","pt":"claro","ru":"светлый (о цвете)","source":{"pdfPage":37,"printedPage":35,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"claro","ru":"светлый (о цвете)"},"selection":"agent-curated"}]},{"id":3,"title":"Знакомство и кино","titleLang":"ru","printedPage":39,"pdfPage":41,"status":"curated-starter","cards":[{"id":"P003-W001","pt":"cinema","ru":"кинотеатр","source":{"pdfPage":51,"printedPage":49,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"cinema","ru":"кинотеатр"},"selection":"agent-curated"},{"id":"P003-W002","pt":"gente","ru":"люди","source":{"pdfPage":51,"printedPage":49,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"gente","ru":"люди"},"selection":"agent-curated"},{"id":"P003-W003","pt":"fila","ru":"очередь","source":{"pdfPage":51,"printedPage":49,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"fila","ru":"очередь"},"selection":"agent-curated"},{"id":"P003-W004","pt":"ingresso","ru":"билет в кино","source":{"pdfPage":51,"printedPage":49,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"bilhete","ru":"билет в кино"},"selection":"agent-curated","adaptationId":"BR-002"},{"id":"P003-W005","pt":"diretor de cinema","ru":"кинорежиссёр","source":{"pdfPage":51,"printedPage":49,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"realizador","ru":"кинорежиссёр"},"selection":"agent-curated","adaptationId":"BR-003"},{"id":"P003-W006","pt":"famoso","ru":"знаменитый","source":{"pdfPage":51,"printedPage":49,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"famoso","ru":"знаменитый"},"selection":"agent-curated"},{"id":"P003-W007","pt":"namorado","ru":"парень, возлюбленный","source":{"pdfPage":51,"printedPage":49,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"namorado","ru":"парень, возлюбленный"},"selection":"agent-curated"},{"id":"P003-W008","pt":"divertido","ru":"забавный","source":{"pdfPage":51,"printedPage":49,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"divertido","ru":"забавный"},"selection":"agent-curated"},{"id":"P003-W009","pt":"comunicativo","ru":"общительный","source":{"pdfPage":51,"printedPage":49,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"comunicativo","ru":"общительный"},"selection":"agent-curated"},{"id":"P003-W010","pt":"colega de trabalho","ru":"коллега по работе","source":{"pdfPage":51,"printedPage":49,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"colega de trabalho","ru":"коллега по работе"},"selection":"agent-curated"},{"id":"P003-W011","pt":"idade","ru":"возраст","source":{"pdfPage":51,"printedPage":49,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"idade","ru":"возраст"},"selection":"agent-curated"},{"id":"P003-W012","pt":"trabalhar","ru":"работать","source":{"pdfPage":51,"printedPage":49,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"trabalhar","ru":"работать"},"selection":"agent-curated"},{"id":"P003-W013","pt":"tímido","ru":"застенчивый","source":{"pdfPage":52,"printedPage":50,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"tímido","ru":"застенчивый"},"selection":"agent-curated"},{"id":"P003-W014","pt":"muito prazer","ru":"очень приятно (при знакомстве)","source":{"pdfPage":52,"printedPage":50,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"muito gosto","ru":"очень приятно (при знакомстве)"},"selection":"agent-curated","adaptationId":"BR-004"},{"id":"P003-W015","pt":"esperar","ru":"ждать","source":{"pdfPage":52,"printedPage":50,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"estar à espera de","ru":"ждать"},"selection":"agent-curated","adaptationId":"BR-005"},{"id":"P003-W016","pt":"ator","ru":"актёр","source":{"pdfPage":52,"printedPage":50,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"actor","ru":"актёр"},"selection":"agent-curated","adaptationId":"BR-006"}]},{"id":4,"title":"В рабочем кабинете","titleLang":"ru","printedPage":54,"pdfPage":56,"status":"curated-starter","cards":[{"id":"P004-W001","pt":"escritório","ru":"офис, рабочий кабинет","source":{"pdfPage":66,"printedPage":64,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"escritório","ru":"офис, рабочий кабинет"},"selection":"agent-curated"},{"id":"P004-W002","pt":"janela","ru":"окно","source":{"pdfPage":66,"printedPage":64,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"janela","ru":"окно"},"selection":"agent-curated"},{"id":"P004-W003","pt":"escrivaninha","ru":"письменный стол","source":{"pdfPage":66,"printedPage":64,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"secretária","ru":"письменный стол"},"selection":"agent-curated","adaptationId":"BR-007"},{"id":"P004-W004","pt":"computador","ru":"компьютер","source":{"pdfPage":66,"printedPage":64,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"computador","ru":"компьютер"},"selection":"agent-curated"},{"id":"P004-W005","pt":"impressora","ru":"принтер","source":{"pdfPage":66,"printedPage":64,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"impressora","ru":"принтер"},"selection":"agent-curated"},{"id":"P004-W006","pt":"luminária","ru":"лампа, светильник","source":{"pdfPage":66,"printedPage":64,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"candeeiro","ru":"лампа, светильник"},"selection":"agent-curated","adaptationId":"BR-008"},{"id":"P004-W007","pt":"gaveta","ru":"выдвижной ящик","source":{"pdfPage":66,"printedPage":64,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"gaveta","ru":"выдвижной ящик"},"selection":"agent-curated"},{"id":"P004-W008","pt":"papel","ru":"бумага","source":{"pdfPage":66,"printedPage":64,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"papel","ru":"бумага"},"selection":"agent-curated"},{"id":"P004-W009","pt":"caneta esferográfica","ru":"шариковая ручка","source":{"pdfPage":66,"printedPage":64,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"esferográfica","ru":"шариковая ручка"},"selection":"agent-curated","adaptationId":"BR-009"},{"id":"P004-W010","pt":"lápis","ru":"карандаш","source":{"pdfPage":66,"printedPage":64,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"lápis","ru":"карандаш"},"selection":"agent-curated"},{"id":"P004-W011","pt":"caderno","ru":"тетрадь","source":{"pdfPage":66,"printedPage":64,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"caderno","ru":"тетрадь"},"selection":"agent-curated"},{"id":"P004-W012","pt":"parede","ru":"стена","source":{"pdfPage":66,"printedPage":64,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"parede","ru":"стена"},"selection":"agent-curated"},{"id":"P004-W013","pt":"espelho","ru":"зеркало","source":{"pdfPage":66,"printedPage":64,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"espelho","ru":"зеркало"},"selection":"agent-curated"},{"id":"P004-W014","pt":"poltrona","ru":"кресло","source":{"pdfPage":66,"printedPage":64,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"poltrona","ru":"кресло"},"selection":"agent-curated"},{"id":"P004-W015","pt":"dicionário","ru":"словарь","source":{"pdfPage":66,"printedPage":64,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"dicionário","ru":"словарь"},"selection":"agent-curated"},{"id":"P004-W016","pt":"copo","ru":"стакан","source":{"pdfPage":66,"printedPage":64,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"copo","ru":"стакан"},"selection":"agent-curated"},{"id":"P004-W017","pt":"garrafa","ru":"бутылка","source":{"pdfPage":66,"printedPage":64,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"garrafa","ru":"бутылка"},"selection":"agent-curated"},{"id":"P004-W018","pt":"celular","ru":"мобильный телефон","source":{"pdfPage":66,"printedPage":64,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"telemóvel","ru":"мобильный телефон"},"selection":"agent-curated","adaptationId":"BR-010"}]},{"id":5,"title":"Дни недели. Телефон и встреча","titleLang":"ru","printedPage":68,"pdfPage":70,"status":"curated-starter","cards":[{"id":"P005-W001","pt":"falar","ru":"говорить","source":{"pdfPage":70,"printedPage":68,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"falar","ru":"говорить"},"selection":"agent-curated"},{"id":"P005-W002","pt":"comer","ru":"есть (принимать пищу)","source":{"pdfPage":70,"printedPage":68,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"comer","ru":"есть (принимать пищу)"},"selection":"agent-curated"},{"id":"P005-W003","pt":"partir","ru":"уезжать","source":{"pdfPage":70,"printedPage":68,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"partir","ru":"уезжать"},"selection":"agent-curated"},{"id":"P005-W004","pt":"ajudar","ru":"помогать","source":{"pdfPage":70,"printedPage":68,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"ajudar","ru":"помогать"},"selection":"agent-curated"},{"id":"P005-W005","pt":"pagar","ru":"платить","source":{"pdfPage":70,"printedPage":68,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"pagar","ru":"платить"},"selection":"agent-curated"},{"id":"P005-W006","pt":"ganhar","ru":"зарабатывать","source":{"pdfPage":70,"printedPage":68,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"ganhar","ru":"зарабатывать"},"selection":"agent-curated","partOfSpeech":"глагол","examplePt":"Ela ganha dinheiro trabalhando.","exampleRu":"Она зарабатывает деньги работой."},{"id":"P005-W007","pt":"gastar","ru":"тратить","source":{"pdfPage":70,"printedPage":68,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"gastar","ru":"тратить"},"selection":"agent-curated"},{"id":"P005-W008","pt":"começar","ru":"начинать","source":{"pdfPage":70,"printedPage":68,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"começar","ru":"начинать"},"selection":"agent-curated"},{"id":"P005-W009","pt":"encontrar","ru":"находить","source":{"pdfPage":71,"printedPage":69,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"encontrar","ru":"находить"},"selection":"agent-curated"},{"id":"P005-W010","pt":"buscar","ru":"искать","source":{"pdfPage":71,"printedPage":69,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"buscar","ru":"искать"},"selection":"agent-curated"},{"id":"P005-W011","pt":"desculpar","ru":"извинять","source":{"pdfPage":71,"printedPage":69,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"desculpar","ru":"извинять"},"selection":"agent-curated"},{"id":"P005-W012","pt":"acordar","ru":"просыпаться","source":{"pdfPage":71,"printedPage":69,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"acordar","ru":"просыпаться"},"selection":"agent-curated"},{"id":"P005-W013","pt":"almoçar","ru":"обедать","source":{"pdfPage":71,"printedPage":69,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"almoçar","ru":"обедать"},"selection":"agent-curated"},{"id":"P005-W014","pt":"jantar","ru":"ужинать","source":{"pdfPage":71,"printedPage":69,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"jantar","ru":"ужинать"},"selection":"agent-curated"},{"id":"P005-W015","pt":"escrever","ru":"писать","source":{"pdfPage":71,"printedPage":69,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"escrever","ru":"писать"},"selection":"agent-curated"},{"id":"P005-W016","pt":"cozinhar","ru":"варить","source":{"pdfPage":71,"printedPage":69,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"cozer","ru":"варить"},"selection":"agent-curated","adaptationId":"BR-011"}]},{"id":6,"title":"Времена года, месяцы и даты","titleLang":"ru","printedPage":77,"pdfPage":79,"status":"curated-starter","cards":[{"id":"P006-W001","pt":"ano letivo","ru":"учебный год","source":{"pdfPage":85,"printedPage":83,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"ano lectivo","ru":"учебный год"},"selection":"agent-curated","adaptationId":"BR-012"},{"id":"P006-W002","pt":"comemorar","ru":"отмечать праздник","source":{"pdfPage":85,"printedPage":83,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"comemorar","ru":"отмечать праздник"},"selection":"agent-curated"},{"id":"P006-W003","pt":"castanha","ru":"каштан","source":{"pdfPage":85,"printedPage":83,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"castanha","ru":"каштан"},"selection":"agent-curated"},{"id":"P006-W004","pt":"abrir","ru":"открывать","source":{"pdfPage":85,"printedPage":83,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"abrir","ru":"открывать"},"selection":"agent-curated"},{"id":"P006-W005","pt":"festa","ru":"праздник","source":{"pdfPage":85,"printedPage":83,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"festa","ru":"праздник"},"selection":"agent-curated"},{"id":"P006-W006","pt":"fim","ru":"конец","source":{"pdfPage":85,"printedPage":83,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"fim","ru":"конец"},"selection":"agent-curated"},{"id":"P006-W007","pt":"festejar","ru":"праздновать","source":{"pdfPage":85,"printedPage":83,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"festejar","ru":"праздновать"},"selection":"agent-curated"},{"id":"P006-W008","pt":"em família","ru":"в семейном кругу","source":{"pdfPage":85,"printedPage":83,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"em família","ru":"в семейном кругу"},"selection":"agent-curated"},{"id":"P006-W009","pt":"presente","ru":"подарок","source":{"pdfPage":85,"printedPage":83,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"presente","ru":"подарок"},"selection":"agent-curated"},{"id":"P006-W010","pt":"preferir","ru":"предпочитать","source":{"pdfPage":85,"printedPage":83,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"preferir","ru":"предпочитать"},"selection":"agent-curated"},{"id":"P006-W011","pt":"início","ru":"начало","source":{"pdfPage":85,"printedPage":83,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"início","ru":"начало"},"selection":"agent-curated"},{"id":"P006-W012","pt":"feriado","ru":"праздничный нерабочий день","source":{"pdfPage":85,"printedPage":83,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"feriado","ru":"праздничный нерабочий день"},"selection":"agent-curated"},{"id":"P006-W013","pt":"estação","ru":"время года","source":{"pdfPage":85,"printedPage":83,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"estação","ru":"время года"},"selection":"agent-curated"},{"id":"P006-W014","pt":"praia","ru":"пляж","source":{"pdfPage":85,"printedPage":83,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"praia","ru":"пляж"},"selection":"agent-curated"},{"id":"P006-W015","pt":"voltar","ru":"возвращаться","source":{"pdfPage":85,"printedPage":83,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"regressar","ru":"возвращаться"},"selection":"agent-curated","adaptationId":"BR-013"}]},{"id":7,"title":"Мой рабочий день","titleLang":"ru","printedPage":89,"pdfPage":91,"status":"curated-starter","cards":[{"id":"P007-W001","pt":"levantar-se","ru":"вставать","source":{"pdfPage":97,"printedPage":95,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"levantar-se","ru":"вставать"},"selection":"agent-curated"},{"id":"P007-W002","pt":"preguiçoso","ru":"ленивый","source":{"pdfPage":97,"printedPage":95,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"preguiçoso","ru":"ленивый"},"selection":"agent-curated"},{"id":"P007-W003","pt":"razão","ru":"причина","source":{"pdfPage":97,"printedPage":95,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"razão","ru":"причина"},"selection":"agent-curated"},{"id":"P007-W004","pt":"tomar banho","ru":"принимать душ","source":{"pdfPage":97,"printedPage":95,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"tomar duche","ru":"принимать душ"},"selection":"agent-curated","adaptationId":"BR-014"},{"id":"P007-W005","pt":"escovar os dentes","ru":"чистить зубы","source":{"pdfPage":97,"printedPage":95,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"lavar os dentes","ru":"чистить зубы"},"selection":"agent-curated","adaptationId":"BR-015"},{"id":"P007-W006","pt":"pentear-se","ru":"причёсываться","source":{"pdfPage":97,"printedPage":95,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"pentear-se","ru":"причёсываться"},"selection":"agent-curated"},{"id":"P007-W007","pt":"vestir-se","ru":"одеваться","source":{"pdfPage":97,"printedPage":95,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"vestir-se","ru":"одеваться"},"selection":"agent-curated"},{"id":"P007-W008","pt":"tomar café da manhã","ru":"завтракать","source":{"pdfPage":97,"printedPage":95,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"tomar o pequeno almoço","ru":"завтракать"},"selection":"agent-curated","adaptationId":"BR-016"},{"id":"P007-W009","pt":"café com leite","ru":"кофе с молоком","source":{"pdfPage":97,"printedPage":95,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"café com leite","ru":"кофе с молоком"},"selection":"agent-curated"},{"id":"P007-W010","pt":"pegar o ônibus","ru":"садиться на автобус","source":{"pdfPage":97,"printedPage":95,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"apanhar o autocarro","ru":"садиться на автобус"},"selection":"agent-curated","adaptationId":"BR-017"},{"id":"P007-W011","pt":"ponto de ônibus","ru":"автобусная остановка","source":{"pdfPage":97,"printedPage":95,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"paragem","ru":"автобусная остановка"},"selection":"agent-curated","adaptationId":"BR-018"},{"id":"P007-W012","pt":"trânsito","ru":"дорожное движение","source":{"pdfPage":97,"printedPage":95,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"trânsito","ru":"дорожное движение"},"selection":"agent-curated"},{"id":"P007-W013","pt":"refeitório","ru":"столовая","source":{"pdfPage":97,"printedPage":95,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"refeitório","ru":"столовая"},"selection":"agent-curated"},{"id":"P007-W014","pt":"lanchar","ru":"перекусывать","source":{"pdfPage":97,"printedPage":95,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"lanchar","ru":"перекусывать"},"selection":"agent-curated"},{"id":"P007-W015","pt":"pôr a mesa","ru":"накрывать на стол","source":{"pdfPage":97,"printedPage":95,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"pôr a mesa","ru":"накрывать на стол"},"selection":"agent-curated"},{"id":"P007-W016","pt":"deitar-se","ru":"ложиться","source":{"pdfPage":97,"printedPage":95,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"deitar-se","ru":"ложиться"},"selection":"agent-curated"},{"id":"P007-W017","pt":"adormecer","ru":"засыпать","source":{"pdfPage":97,"printedPage":95,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"adormecer","ru":"засыпать"},"selection":"agent-curated"}]},{"id":8,"title":"Автопортрет и семья","titleLang":"ru","printedPage":101,"pdfPage":103,"status":"curated-starter","cards":[{"id":"P008-W001","pt":"retrato","ru":"портрет","source":{"pdfPage":113,"printedPage":111,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"retrato","ru":"портрет"},"selection":"agent-curated"},{"id":"P008-W002","pt":"ondulado","ru":"волнистый","source":{"pdfPage":113,"printedPage":111,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"ondulado","ru":"волнистый"},"selection":"agent-curated"},{"id":"P008-W003","pt":"reto","ru":"прямой","source":{"pdfPage":113,"printedPage":111,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"recto","ru":"прямой"},"selection":"agent-curated","adaptationId":"BR-019"},{"id":"P008-W004","pt":"esportista","ru":"спортсмен","source":{"pdfPage":113,"printedPage":111,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"desportista","ru":"спортсмен"},"selection":"agent-curated","adaptationId":"BR-020"},{"id":"P008-W005","pt":"ao ar livre","ru":"на свежем воздухе","source":{"pdfPage":113,"printedPage":111,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"ao ar livre","ru":"на свежем воздухе"},"selection":"agent-curated"},{"id":"P008-W006","pt":"usar","ru":"носить (одежду, обувь)","source":{"pdfPage":113,"printedPage":111,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"usar","ru":"носить (одежду, обувь)"},"selection":"agent-curated"},{"id":"P008-W007","pt":"estar aposentado","ru":"быть на пенсии","source":{"pdfPage":113,"printedPage":111,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"estar reformado","ru":"быть на пенсии"},"selection":"agent-curated","adaptationId":"BR-021"},{"id":"P008-W008","pt":"aposentadoria","ru":"пенсия по старости","source":{"pdfPage":113,"printedPage":111,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"pensão","ru":"пенсия"},"selection":"agent-curated","adaptationId":"BR-022"},{"id":"P008-W009","pt":"viúva","ru":"вдова","source":{"pdfPage":113,"printedPage":111,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"viúva","ru":"вдова"},"selection":"agent-curated"},{"id":"P008-W010","pt":"roupa","ru":"одежда","source":{"pdfPage":113,"printedPage":111,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"roupa","ru":"одежда"},"selection":"agent-curated"},{"id":"P008-W011","pt":"jovem","ru":"молодой","source":{"pdfPage":113,"printedPage":111,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"jovem","ru":"молодой"},"selection":"agent-curated"},{"id":"P008-W012","pt":"funcionário","ru":"служащий","source":{"pdfPage":113,"printedPage":111,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"funcionário","ru":"служащий"},"selection":"agent-curated"},{"id":"P008-W013","pt":"grisalho","ru":"седой","source":{"pdfPage":113,"printedPage":111,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"grisalho","ru":"седой"},"selection":"agent-curated"},{"id":"P008-W014","pt":"bigode","ru":"усы","source":{"pdfPage":113,"printedPage":111,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"bigode","ru":"усы"},"selection":"agent-curated"},{"id":"P008-W015","pt":"responsável","ru":"ответственный","source":{"pdfPage":113,"printedPage":111,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"responsável","ru":"ответственный"},"selection":"agent-curated"},{"id":"P008-W016","pt":"gêmeo","ru":"близнец","source":{"pdfPage":113,"printedPage":111,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"gémeo","ru":"близнец"},"selection":"agent-curated","adaptationId":"BR-057","partOfSpeech":"существительное","examplePt":"Ele tem um irmão gêmeo.","exampleRu":"У него есть брат-близнец."}]},{"id":9,"title":"Моя учёба и библиотека","titleLang":"ru","printedPage":119,"pdfPage":121,"status":"curated-starter","cards":[{"id":"P009-W001","pt":"lei","ru":"закон","source":{"pdfPage":128,"printedPage":126,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"lei","ru":"закон"},"selection":"agent-curated"},{"id":"P009-W002","pt":"disciplina","ru":"учебный предмет","source":{"pdfPage":128,"printedPage":126,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"disciplina","ru":"учебный предмет"},"selection":"agent-curated"},{"id":"P009-W003","pt":"direito","ru":"право (юриспруденция)","source":{"pdfPage":128,"printedPage":126,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"direito","ru":"право (юриспруденция)"},"selection":"agent-curated"},{"id":"P009-W004","pt":"amizade","ru":"дружба","source":{"pdfPage":128,"printedPage":126,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"amizade","ru":"дружба"},"selection":"agent-curated"},{"id":"P009-W005","pt":"anotação","ru":"конспект, запись","source":{"pdfPage":128,"printedPage":126,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"apontamento","ru":"конспект, запись"},"selection":"agent-curated","adaptationId":"BR-023"},{"id":"P009-W006","pt":"matéria","ru":"учебный предмет, материал","source":{"pdfPage":128,"printedPage":126,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"matéria","ru":"учебный предмет, материал"},"selection":"agent-curated"},{"id":"P009-W007","pt":"documentação","ru":"документация","source":{"pdfPage":128,"printedPage":126,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"documentação","ru":"документация"},"selection":"agent-curated"},{"id":"P009-W008","pt":"pesquisa","ru":"исследование","source":{"pdfPage":128,"printedPage":126,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"pesquisa","ru":"исследование"},"selection":"agent-curated"},{"id":"P009-W009","pt":"copiar","ru":"копировать","source":{"pdfPage":128,"printedPage":126,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"copiar","ru":"копировать"},"selection":"agent-curated"},{"id":"P009-W010","pt":"manualmente","ru":"вручную","source":{"pdfPage":128,"printedPage":126,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"manualmente","ru":"вручную"},"selection":"agent-curated"},{"id":"P009-W011","pt":"conselho","ru":"совет","source":{"pdfPage":128,"printedPage":126,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"conselho","ru":"совет"},"selection":"agent-curated"},{"id":"P009-W012","pt":"prova","ru":"экзамен, контрольная работа","source":{"pdfPage":128,"printedPage":126,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"prova","ru":"зачёт"},"selection":"agent-curated","adaptationId":"BR-024"}]},{"id":10,"title":"Мой дом. За столом","titleLang":"ru","printedPage":135,"pdfPage":137,"status":"curated-starter","cards":[{"id":"P010-W001","pt":"quarto","ru":"спальня","source":{"pdfPage":148,"printedPage":146,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"quarto","ru":"спальня"},"selection":"agent-curated"},{"id":"P010-W002","pt":"armário","ru":"шкаф","source":{"pdfPage":148,"printedPage":146,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"armário","ru":"шкаф"},"selection":"agent-curated"},{"id":"P010-W003","pt":"cama de casal","ru":"двуспальная кровать","source":{"pdfPage":148,"printedPage":146,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"cama de casal","ru":"двуспальная кровать"},"selection":"agent-curated"},{"id":"P010-W004","pt":"escrivaninha","ru":"письменный стол","source":{"pdfPage":148,"printedPage":146,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"secretária","ru":"письменный стол"},"selection":"agent-curated","adaptationId":"BR-025"},{"id":"P010-W005","pt":"mesa de cabeceira","ru":"прикроватная тумбочка","source":{"pdfPage":148,"printedPage":146,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"mesa de cabeceira","ru":"прикроватная тумбочка"},"selection":"agent-curated"},{"id":"P010-W006","pt":"tapete","ru":"ковёр","source":{"pdfPage":148,"printedPage":146,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"tapete","ru":"ковёр"},"selection":"agent-curated"},{"id":"P010-W007","pt":"sala de estar","ru":"гостиная","source":{"pdfPage":148,"printedPage":146,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"sala de estar","ru":"гостиная"},"selection":"agent-curated"},{"id":"P010-W008","pt":"sofá","ru":"диван","source":{"pdfPage":148,"printedPage":146,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"sofá","ru":"диван"},"selection":"agent-curated"},{"id":"P010-W009","pt":"almofada","ru":"диванная подушка","source":{"pdfPage":148,"printedPage":146,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"almofada","ru":"диванная подушка"},"selection":"agent-curated"},{"id":"P010-W010","pt":"cozinha","ru":"кухня","source":{"pdfPage":148,"printedPage":146,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"cozinha","ru":"кухня"},"selection":"agent-curated"},{"id":"P010-W011","pt":"geladeira","ru":"холодильник","source":{"pdfPage":148,"printedPage":146,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"frigorífico","ru":"холодильник"},"selection":"agent-curated","adaptationId":"BR-026"},{"id":"P010-W012","pt":"louça","ru":"посуда","source":{"pdfPage":148,"printedPage":146,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"loiça","ru":"посуда"},"selection":"agent-curated","adaptationId":"BR-027"},{"id":"P010-W013","pt":"pia","ru":"кухонная мойка","source":{"pdfPage":148,"printedPage":146,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"lava-loiça","ru":"кухонная мойка"},"selection":"agent-curated","adaptationId":"BR-028"}]},{"id":11,"title":"Автобиография и работа","titleLang":"ru","printedPage":154,"pdfPage":156,"status":"curated-starter","cards":[{"id":"P011-W001","pt":"escola infantil","ru":"детское дошкольное учреждение","source":{"pdfPage":162,"printedPage":160,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"infantário","ru":"детское дошкольное учреждение"},"selection":"agent-curated","adaptationId":"BR-029"},{"id":"P011-W002","pt":"formação","ru":"образование, подготовка","source":{"pdfPage":163,"printedPage":161,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"formação","ru":"образование, подготовка"},"selection":"agent-curated"},{"id":"P011-W003","pt":"mestrado","ru":"магистратура","source":{"pdfPage":163,"printedPage":161,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"mestrado","ru":"магистратура"},"selection":"agent-curated"},{"id":"P011-W004","pt":"doutorado","ru":"докторантура, докторская программа","source":{"pdfPage":163,"printedPage":161,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"doutoramento","ru":"докторантура, докторская программа"},"selection":"agent-curated","adaptationId":"BR-030"},{"id":"P011-W005","pt":"currículo","ru":"резюме","source":{"pdfPage":163,"printedPage":161,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"currículo","ru":"резюме"},"selection":"agent-curated"},{"id":"P011-W006","pt":"experiência","ru":"опыт","source":{"pdfPage":163,"printedPage":161,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"experiência","ru":"опыт"},"selection":"agent-curated"},{"id":"P011-W007","pt":"emprego","ru":"работа, место работы","source":{"pdfPage":163,"printedPage":161,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"emprego","ru":"работа, место работы"},"selection":"agent-curated"},{"id":"P011-W008","pt":"responsabilidade","ru":"ответственность","source":{"pdfPage":163,"printedPage":161,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"responsabilidade","ru":"ответственность"},"selection":"agent-curated"},{"id":"P011-W009","pt":"conferência","ru":"конференция","source":{"pdfPage":163,"printedPage":161,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"conferência","ru":"конференция"},"selection":"agent-curated"},{"id":"P011-W010","pt":"função","ru":"должностная функция","source":{"pdfPage":163,"printedPage":161,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"função","ru":"должностная функция"},"selection":"agent-curated"}]},{"id":12,"title":"Еда и ресторан","titleLang":"ru","printedPage":173,"pdfPage":175,"status":"curated-starter","cards":[{"id":"P012-W001","pt":"refeição","ru":"приём пищи","source":{"pdfPage":180,"printedPage":178,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"refeição","ru":"приём пищи"},"selection":"agent-curated"},{"id":"P012-W002","pt":"café da manhã","ru":"завтрак","source":{"pdfPage":180,"printedPage":178,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"pequeno almoço","ru":"завтрак"},"selection":"agent-curated","adaptationId":"BR-031"},{"id":"P012-W003","pt":"pão com manteiga","ru":"хлеб с маслом","source":{"pdfPage":180,"printedPage":178,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"pão com manteiga","ru":"хлеб с маслом"},"selection":"agent-curated"},{"id":"P012-W004","pt":"jornal","ru":"газета","source":{"pdfPage":180,"printedPage":178,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"jornal","ru":"газета"},"selection":"agent-curated"},{"id":"P012-W005","pt":"freguês","ru":"посетитель, покупатель","source":{"pdfPage":180,"printedPage":178,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"freguês","ru":"посетитель, покупатель"},"selection":"agent-curated"},{"id":"P012-W006","pt":"pastel de nata","ru":"паштел-де-ната (португальское пирожное)","source":{"pdfPage":180,"printedPage":178,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"pastel de nata","ru":"паштел-де-ната (португальское пирожное)"},"selection":"agent-curated"},{"id":"P012-W007","pt":"bacalhau","ru":"солёная сушёная треска","source":{"pdfPage":181,"printedPage":179,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"bacalhau","ru":"солёная сушёная треска"},"selection":"agent-curated"},{"id":"P012-W008","pt":"sobremesa","ru":"десерт","source":{"pdfPage":181,"printedPage":179,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"sobremesa","ru":"десерт"},"selection":"agent-curated"},{"id":"P012-W009","pt":"vinho tinto","ru":"красное вино","source":{"pdfPage":181,"printedPage":179,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"vinho tinto","ru":"красное вино"},"selection":"agent-curated"},{"id":"P012-W010","pt":"vinho branco","ru":"белое вино","source":{"pdfPage":181,"printedPage":179,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"vinho branco","ru":"белое вино"},"selection":"agent-curated"},{"id":"P012-W011","pt":"restaurante","ru":"ресторан","source":{"pdfPage":181,"printedPage":179,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"restaurante","ru":"ресторан"},"selection":"agent-curated"},{"id":"P012-W012","pt":"preço","ru":"цена","source":{"pdfPage":181,"printedPage":179,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"preço","ru":"цена"},"selection":"agent-curated"}]},{"id":13,"title":"Покупки","titleLang":"ru","printedPage":189,"pdfPage":191,"status":"curated-starter","cards":[{"id":"P013-W001","pt":"geladeira","ru":"холодильник","source":{"pdfPage":199,"printedPage":197,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"frigorífico","ru":"холодильник"},"selection":"agent-curated","adaptationId":"BR-032"},{"id":"P013-W002","pt":"açougue","ru":"мясной отдел, мясная лавка","source":{"pdfPage":200,"printedPage":198,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"talho","ru":"мясной отдел, мясная лавка"},"selection":"agent-curated","adaptationId":"BR-033"},{"id":"P013-W003","pt":"caqui","ru":"хурма","source":{"pdfPage":200,"printedPage":198,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"dióspiro","ru":"хурма"},"selection":"agent-curated","adaptationId":"BR-034"},{"id":"P013-W004","pt":"laranja","ru":"апельсин","source":{"pdfPage":200,"printedPage":198,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"laranja","ru":"апельсин"},"selection":"agent-curated"},{"id":"P013-W005","pt":"cebola","ru":"лук","source":{"pdfPage":200,"printedPage":198,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"cebola","ru":"лук"},"selection":"agent-curated"},{"id":"P013-W006","pt":"cenoura","ru":"морковь","source":{"pdfPage":200,"printedPage":198,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"cenoura","ru":"морковь"},"selection":"agent-curated"},{"id":"P013-W007","pt":"manteiga","ru":"сливочное масло","source":{"pdfPage":200,"printedPage":198,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"manteiga","ru":"сливочное масло"},"selection":"agent-curated"},{"id":"P013-W008","pt":"farinha","ru":"мука","source":{"pdfPage":200,"printedPage":198,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"farinha","ru":"мука"},"selection":"agent-curated"},{"id":"P013-W009","pt":"embalagem","ru":"упаковка","source":{"pdfPage":200,"printedPage":198,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"embalagem","ru":"упаковка"},"selection":"agent-curated"},{"id":"P013-W010","pt":"água sanitária","ru":"хлорсодержащее чистящее средство","source":{"pdfPage":200,"printedPage":198,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"lixívia","ru":"хлорсодержащее чистящее средство"},"selection":"agent-curated","adaptationId":"BR-035"},{"id":"P013-W011","pt":"vaso sanitário","ru":"унитаз","source":{"pdfPage":200,"printedPage":198,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"sanita","ru":"унитаз"},"selection":"agent-curated","adaptationId":"BR-036"},{"id":"P013-W012","pt":"xampu","ru":"шампунь","source":{"pdfPage":200,"printedPage":198,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"champô","ru":"шампунь"},"selection":"agent-curated","adaptationId":"BR-037"},{"id":"P013-W013","pt":"condicionador de cabelo","ru":"бальзам-ополаскиватель для волос","source":{"pdfPage":200,"printedPage":198,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"amaciador para o cabelo","ru":"бальзам-ополаскиватель для волос"},"selection":"agent-curated","adaptationId":"BR-038"}]},{"id":14,"title":"Отпуск и гостиница","titleLang":"ru","printedPage":210,"pdfPage":212,"status":"curated-starter","cards":[{"id":"P014-W001","pt":"camping","ru":"кемпинг","source":{"pdfPage":218,"printedPage":216,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"campismo","ru":"кемпинг"},"selection":"agent-curated","adaptationId":"BR-039"},{"id":"P014-W002","pt":"barraca","ru":"палатка","source":{"pdfPage":218,"printedPage":216,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"tenda","ru":"палатка"},"selection":"agent-curated","adaptationId":"BR-040"},{"id":"P014-W003","pt":"clareira","ru":"поляна","source":{"pdfPage":218,"printedPage":216,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"clareira","ru":"поляна"},"selection":"agent-curated"},{"id":"P014-W004","pt":"pinhal","ru":"сосновый лес","source":{"pdfPage":218,"printedPage":216,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"pinhal","ru":"сосновый лес"},"selection":"agent-curated"},{"id":"P014-W005","pt":"boia","ru":"плавательный круг","source":{"pdfPage":218,"printedPage":216,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"bóia","ru":"плавательный круг"},"selection":"agent-curated","adaptationId":"BR-041"},{"id":"P014-W006","pt":"colchão de ar","ru":"надувной матрас","source":{"pdfPage":218,"printedPage":216,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"colchão de ar","ru":"надувной матрас"},"selection":"agent-curated"},{"id":"P014-W007","pt":"nadadeiras","ru":"ласты","source":{"pdfPage":218,"printedPage":216,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"barbatanas","ru":"ласты"},"selection":"agent-curated","adaptationId":"BR-042"},{"id":"P014-W008","pt":"mergulhar","ru":"нырять","source":{"pdfPage":218,"printedPage":216,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"mergulhar","ru":"нырять"},"selection":"agent-curated"},{"id":"P014-W009","pt":"gaivota","ru":"чайка","source":{"pdfPage":218,"printedPage":216,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"gaivota","ru":"чайка"},"selection":"agent-curated"},{"id":"P014-W010","pt":"descartável","ru":"одноразовый","source":{"pdfPage":218,"printedPage":216,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"descartável","ru":"одноразовый"},"selection":"agent-curated"},{"id":"P014-W011","pt":"neve","ru":"снег","source":{"pdfPage":218,"printedPage":216,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"neve","ru":"снег"},"selection":"agent-curated"},{"id":"P014-W012","pt":"alugar","ru":"брать напрокат","source":{"pdfPage":218,"printedPage":216,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"alugar","ru":"брать напрокат, сдавать внаём"},"selection":"agent-curated","partOfSpeech":"глагол","examplePt":"Vou alugar um carro.","exampleRu":"Я возьму машину напрокат."},{"id":"P014-W013","pt":"palácio","ru":"дворец","source":{"pdfPage":218,"printedPage":216,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"palácio","ru":"дворец"},"selection":"agent-curated"},{"id":"P014-W014","pt":"castelo","ru":"замок (здание)","source":{"pdfPage":218,"printedPage":216,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"castelo","ru":"замок (здание)"},"selection":"agent-curated"},{"id":"P014-W015","pt":"igreja","ru":"церковь","source":{"pdfPage":218,"printedPage":216,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"igreja","ru":"церковь"},"selection":"agent-curated"},{"id":"P014-W016","pt":"visto","ru":"виза","source":{"pdfPage":218,"printedPage":216,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"visto","ru":"виза"},"selection":"agent-curated"},{"id":"P014-W012-S2","pt":"alugar","ru":"сдавать в аренду","source":{"pdfPage":218,"printedPage":216,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"alugar","ru":"брать напрокат, сдавать внаём"},"selection":"agent-curated","partOfSpeech":"глагол","examplePt":"Alugo meu apartamento para turistas.","exampleRu":"Я сдаю свою квартиру туристам."}]},{"id":15,"title":"Город и транспорт","titleLang":"ru","printedPage":224,"pdfPage":226,"status":"curated-starter","cards":[{"id":"P015-W001","pt":"bairro","ru":"городской район","source":{"pdfPage":233,"printedPage":231,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"bairro","ru":"городской район"},"selection":"agent-curated"},{"id":"P015-W002","pt":"mosteiro","ru":"монастырь","source":{"pdfPage":233,"printedPage":231,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"mosteiro","ru":"монастырь"},"selection":"agent-curated"},{"id":"P015-W003","pt":"arquitetura","ru":"архитектура","source":{"pdfPage":233,"printedPage":231,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"arquitectura","ru":"архитектура"},"selection":"agent-curated","adaptationId":"BR-058"},{"id":"P015-W004","pt":"escultura","ru":"скульптура","source":{"pdfPage":233,"printedPage":231,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"escultura","ru":"скульптура"},"selection":"agent-curated"},{"id":"P015-W005","pt":"história","ru":"история","source":{"pdfPage":233,"printedPage":231,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"história","ru":"история"},"selection":"agent-curated"},{"id":"P015-W006","pt":"ônibus","ru":"автобус","source":{"pdfPage":234,"printedPage":232,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"autocarro","ru":"автобус"},"selection":"agent-curated","adaptationId":"BR-043"},{"id":"P015-W007","pt":"bonde","ru":"трамвай","source":{"pdfPage":234,"printedPage":232,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"eléctrico","ru":"трамвай"},"selection":"agent-curated","adaptationId":"BR-044"},{"id":"P015-W008","pt":"metrô","ru":"метро","source":{"pdfPage":234,"printedPage":232,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"metro","ru":"метро"},"selection":"agent-curated","adaptationId":"BR-045"},{"id":"P015-W009","pt":"terremoto","ru":"землетрясение","source":{"pdfPage":234,"printedPage":232,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"terramoto","ru":"землетрясение"},"selection":"agent-curated","adaptationId":"BR-046"},{"id":"P015-W010","pt":"ruína","ru":"руина","source":{"pdfPage":234,"printedPage":232,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"ruína","ru":"руина"},"selection":"agent-curated"}]},{"id":16,"title":"Кино и театр","titleLang":"ru","printedPage":245,"pdfPage":247,"status":"curated-starter","cards":[{"id":"P016-W001","pt":"ingressos","ru":"билеты в кино","source":{"pdfPage":251,"printedPage":249,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"bilhetes","ru":"билеты в кино"},"selection":"agent-curated","adaptationId":"BR-047"},{"id":"P016-W002","pt":"pipocas","ru":"попкорн","source":{"pdfPage":251,"printedPage":249,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"pipocas","ru":"попкорн"},"selection":"agent-curated"},{"id":"P016-W003","pt":"filme","ru":"фильм","source":{"pdfPage":251,"printedPage":249,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"filme","ru":"фильм"},"selection":"agent-curated"},{"id":"P016-W004","pt":"sessão","ru":"сеанс","source":{"pdfPage":251,"printedPage":249,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"sessão","ru":"сеанс"},"selection":"agent-curated"},{"id":"P016-W005","pt":"atores","ru":"актёры","source":{"pdfPage":252,"printedPage":250,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"actores","ru":"актёры"},"selection":"agent-curated","adaptationId":"BR-048"},{"id":"P016-W006","pt":"diretor de cinema","ru":"кинорежиссёр","source":{"pdfPage":252,"printedPage":250,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"realizador","ru":"кинорежиссёр"},"selection":"agent-curated","adaptationId":"BR-049"},{"id":"P016-W007","pt":"espetáculo","ru":"спектакль, представление","source":{"pdfPage":252,"printedPage":250,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"espectáculo","ru":"спектакль, представление"},"selection":"agent-curated","adaptationId":"BR-050"},{"id":"P016-W008","pt":"balé","ru":"балет","source":{"pdfPage":252,"printedPage":250,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"bailado","ru":"балет"},"selection":"agent-curated","adaptationId":"BR-051"},{"id":"P016-W009","pt":"registro","ru":"регистр, манера","source":{"pdfPage":252,"printedPage":250,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"registo","ru":"регистр, манера"},"selection":"agent-curated","adaptationId":"BR-052"},{"id":"P016-W010","pt":"companhia","ru":"театральная труппа","source":{"pdfPage":252,"printedPage":250,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"companhia","ru":"театральная труппа"},"selection":"agent-curated"}]},{"id":17,"title":"Врачи и больные","titleLang":"ru","printedPage":258,"pdfPage":260,"status":"curated-starter","cards":[{"id":"P017-W001","pt":"hospital","ru":"больница","source":{"pdfPage":264,"printedPage":262,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"hospital","ru":"больница"},"selection":"agent-curated"},{"id":"P017-W002","pt":"médico de família","ru":"семейный врач","source":{"pdfPage":264,"printedPage":262,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"médico de família","ru":"семейный врач"},"selection":"agent-curated"},{"id":"P017-W003","pt":"pacientes","ru":"пациенты","source":{"pdfPage":264,"printedPage":262,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"doentes","ru":"пациенты"},"selection":"agent-curated","adaptationId":"BR-053"},{"id":"P017-W004","pt":"cirurgião","ru":"хирург","source":{"pdfPage":264,"printedPage":262,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"cirurgião","ru":"хирург"},"selection":"agent-curated"},{"id":"P017-W005","pt":"dentista","ru":"стоматолог","source":{"pdfPage":265,"printedPage":263,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"dentista","ru":"стоматолог"},"selection":"agent-curated"},{"id":"P017-W006","pt":"consultório","ru":"врачебный кабинет","source":{"pdfPage":265,"printedPage":263,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"consultório","ru":"врачебный кабинет"},"selection":"agent-curated"},{"id":"P017-W007","pt":"cáries","ru":"кариес","source":{"pdfPage":265,"printedPage":263,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"cáries","ru":"кариес"},"selection":"agent-curated"},{"id":"P017-W008","pt":"cardiologista","ru":"кардиолог","source":{"pdfPage":265,"printedPage":263,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"cardiologista","ru":"кардиолог"},"selection":"agent-curated"},{"id":"P017-W009","pt":"oftalmologista","ru":"офтальмолог","source":{"pdfPage":265,"printedPage":263,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"oftalmologista","ru":"офтальмолог"},"selection":"agent-curated"},{"id":"P017-W010","pt":"enfermeira","ru":"медсестра","source":{"pdfPage":265,"printedPage":263,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"enfermeira","ru":"медсестра"},"selection":"agent-curated"},{"id":"P017-W011","pt":"pressão arterial","ru":"артериальное давление","source":{"pdfPage":265,"printedPage":263,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"tensão arterial","ru":"артериальное давление"},"selection":"agent-curated","adaptationId":"BR-054"},{"id":"P017-W012","pt":"injeções","ru":"инъекции","source":{"pdfPage":265,"printedPage":263,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"injecções","ru":"инъекции"},"selection":"agent-curated","adaptationId":"BR-055"},{"id":"P017-W013","pt":"lentes de contato","ru":"контактные линзы","source":{"pdfPage":265,"printedPage":263,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"lentes de contacto","ru":"контактные линзы"},"selection":"agent-curated","adaptationId":"BR-056"},{"id":"P017-W014","pt":"óculos","ru":"очки","source":{"pdfPage":265,"printedPage":263,"section":"Текст, словарь или примеры урока"},"sourceEntry":{"pt":"óculos","ru":"очки"},"selection":"agent-curated"}]}],"meaningPolicy":"Значения различаются по отдельным ID, части речи и контексту; адаптации pt-PT → pt-BR фиксируются отдельно."};</script>
+<script>/* Pure scheduling and backup rules. Also usable from Node.js tests. */
+(function (root, factory) {
+  const api = factory();
+  if (typeof module === 'object' && module.exports) module.exports = api;
+  else root.PTCards = api;
+})(typeof globalThis === 'object' ? globalThis : this, function () {
+  'use strict';
+  const DAY = 86400000;
+  const INTERVALS = [1, 3, 7, 14, 30];
+  const RETRY = 10 * 60000;
+  const FORMAT = 'portugues-flashcards';
+  const VERSION = 2;
+  const MAX_EVENTS = 100000;
+  const MAX_TIME = 8000000000000000;
+
+  function emptyState() {
+    return { box: 0, reviews: 0, lapses: 0, lastReviewedAt: null, dueAt: null };
+  }
+  function grade(state, event) {
+    // A stale tab or an early retry must not count as another spaced review.
+    if (state.dueAt !== null && event.at < state.dueAt) return state;
+    const box = event.ok ? Math.min(state.box + 1, 5) : 0;
+    return {
+      box, reviews: state.reviews + 1,
+      lapses: state.lapses + (event.ok ? 0 : 1),
+      lastReviewedAt: event.at,
+      dueAt: event.at + (event.ok ? INTERVALS[box - 1] * DAY : RETRY)
+    };
+  }
+  function stateKey(cardId, direction) { return cardId + ':' + direction; }
+  function states(events) {
+    const result = new Map();
+    const sorted = [...events].sort((a, b) => a.at - b.at || ((a.kind === 'reset') - (b.kind === 'reset')) || a.uid.localeCompare(b.uid));
+    for (const event of sorted) {
+      const key = stateKey(event.cardId, event.direction);
+      if (event.kind === 'reset') { result.delete(key); continue; }
+      result.set(key, grade(result.get(key) || emptyState(), event));
+    }
+    return result;
+  }
+  function shuffled(items, random = Math.random) {
+    const result = [...items];
+    for (let i = result.length - 1; i > 0; i--) {
+      const j = Math.floor(random() * (i + 1));
+      [result[i], result[j]] = [result[j], result[i]];
+    }
+    return result;
+  }
+  function queue(cards, stateMap, direction, mode, limit, now, random = Math.random) {
+    if (mode === 'practice') return shuffled(cards, random).slice(0, limit);
+    const due = [], fresh = [];
+    for (const card of cards) {
+      const state = stateMap.get(stateKey(card.id, direction));
+      if (!state) fresh.push(card);
+      else if (state.dueAt <= now) due.push(card);
+    }
+    due.sort((a, b) => stateMap.get(stateKey(a.id, direction)).dueAt - stateMap.get(stateKey(b.id, direction)).dueAt);
+    return [...due, ...shuffled(fresh, random)].slice(0, limit);
+  }
+  function counts(cards, stateMap, direction, now) {
+    const result = { fresh: 0, due: 0, later: 0, established: 0 };
+    for (const card of cards) {
+      const state = stateMap.get(stateKey(card.id, direction));
+      if (!state) result.fresh++;
+      else {
+        if (state.dueAt <= now) result.due++; else result.later++;
+        if (state.box >= 3) result.established++;
+      }
+    }
+    return result;
+  }
+  function object(value) {
+    return value !== null && typeof value === 'object' && !Array.isArray(value);
+  }
+  function validEvent(event, cardIds) {
+    return object(event) && typeof event.uid === 'string' && /^[A-Za-z0-9_-]{8,100}$/.test(event.uid)
+      && cardIds.has(event.cardId) && (event.direction === 0 || event.direction === 1)
+      && Number.isSafeInteger(event.at) && event.at >= 0 && event.at <= MAX_TIME
+      && ((event.kind === 'answer' && typeof event.ok === 'boolean') || (event.kind === 'reset' && event.ok === null));
+  }
+  function normalizeEvent(event) {
+    return { uid: event.uid, kind: event.kind, cardId: event.cardId, direction: event.direction, at: event.at, ok: event.ok };
+  }
+  function mergeEvents(...groups) {
+    const result = new Map();
+    for (const group of groups) for (const raw of group) {
+      const event = normalizeEvent(raw);
+      const old = result.get(event.uid);
+      if (old && JSON.stringify(old) !== JSON.stringify(event)) throw new Error('Совпадающий ID содержит разные ответы. Импорт отменён.');
+      result.set(event.uid, event);
+    }
+    if (result.size > MAX_EVENTS) throw new Error('Слишком много ответов в резервной копии.');
+    return [...result.values()].sort((a, b) => a.at - b.at || a.uid.localeCompare(b.uid));
+  }
+  function validateLegacy(value, legacyKeys) {
+    if (!object(value)) throw new Error('Старый прогресс должен быть объектом с номерами коробок.');
+    const legacy = {};
+    for (const [key, box] of Object.entries(value)) {
+      if (!legacyKeys.has(key) || !Number.isInteger(box) || box < 1 || box > 5) {
+        throw new Error('Старый прогресс содержит неизвестную карточку или неверную коробку.');
+      }
+      legacy[key] = box;
+    }
+    return legacy;
+  }
+  function validateBackup(value, deckId, cardIds, legacyKeys) {
+    if (!object(value)) throw new Error('Резервная копия должна быть JSON-объектом.');
+    if (!Object.hasOwn(value, 'format')) {
+      if (deckId !== 'curso-basico-01') throw new Error('Старый формат pt_prog относится только к Curso Básico.');
+      return { events: [], legacy: validateLegacy(value, legacyKeys), legacyRaw: '' };
+    }
+    if (value.format !== FORMAT || value.version !== VERSION || value.deckId !== deckId) {
+      throw new Error('Неподдерживаемый формат, версия или другой набор карточек.');
+    }
+    if (!Array.isArray(value.events) || value.events.length > MAX_EVENTS
+      || value.events.some(e => !validEvent(e, cardIds))) throw new Error('Неверные данные ответов в резервной копии.');
+    const legacy = validateLegacy(value.legacy || {}, legacyKeys);
+    if (value.legacyRaw !== undefined && (typeof value.legacyRaw !== 'string' || value.legacyRaw.length > 1000000)) {
+      throw new Error('Неверные данные исходного прогресса.');
+    }
+    return { events: mergeEvents(value.events), legacy, legacyRaw: value.legacyRaw || '' };
+  }
+  function backup(deckId, events, legacy, legacyRaw, now) {
+    return { format: FORMAT, version: VERSION, deckId, exportedAt: new Date(now).toISOString(),
+      events: mergeEvents(events), legacy, legacyRaw };
+  }
+  function tokens(value) {
+    return value.replace(/\([^)]*\)/g, '').split(/[,;]/).map(s => s.trim().toLowerCase()).filter(Boolean);
+  }
+  function clash(a, b) {
+    const parts = new Set(tokens(a));
+    return tokens(b).some(s => parts.has(s));
+  }
+  function options(card, cards, allCards, direction, random = Math.random) {
+    const field = direction === 0 ? 'ru' : 'pt';
+    const answer = card[field];
+    const choices = new Set();
+    for (const source of [shuffled(cards, random), shuffled(allCards, random)]) {
+      for (const other of source) {
+        const value = other[field];
+        if (other.id !== card.id && !clash(value, answer)) choices.add(value);
+        if (choices.size >= 3) break;
+      }
+      if (choices.size >= 3) break;
+    }
+    return shuffled([answer, ...[...choices].slice(0, 3)], random);
+  }
+  return { DAY, INTERVALS, RETRY, FORMAT, VERSION, emptyState, grade, stateKey, states,
+    shuffled, queue, counts, validEvent, mergeEvents, validateLegacy, validateBackup, backup, options };
+});
+</script>
+<script>(function (root, factory) {
+  if (typeof module === 'object' && module.exports) module.exports = factory(require('./core.js'));
+  else root.PTStore = factory(root.PTCards);
+})(typeof globalThis === 'object' ? globalThis : this, function (core) {
+  'use strict';
+  const PREFIX = 'ptcards.v2.';
+  class Store {
+    constructor(storage, deck) {
+      this.storage = storage;
+      this.deck = deck;
+      this.prefix = PREFIX + deck.id + '.';
+      this.hasLegacy = deck.id === 'curso-basico-01';
+      this.cardIds = new Set(deck.lessons.flatMap(l => l.cards.map(c => c.id)));
+      this.legacyKeys = new Set(deck.lessons.flatMap(l => l.cards.map(c => c.legacyKey || l.id + ':' + c.pt)));
+      this.error = '';
+      this.generation = 'main';
+    }
+    activeGeneration() {
+      const value = this.storage.getItem(this.prefix + 'active') || 'main';
+      if (!/^[A-Za-z0-9_-]{1,100}$/.test(value)) throw Error('Invalid storage generation');
+      return value;
+    }
+    fail() {
+      this.error = 'Не удалось сохранить или прочитать данные браузера. Ответы текущей страницы доступны для экспорта JSON. Сохраните копию перед закрытием.';
+    }
+    read() {
+      const events = [], warnings = [];
+      let legacy = {}, legacyRaw = '', settings = {};
+      try {
+        if (!this.storage) throw Error('No storage');
+        this.generation = this.activeGeneration();
+        const eventPrefix = this.prefix + 'event.' + this.generation + '.';
+        for (let i = 0; i < this.storage.length; i++) {
+          const key = this.storage.key(i);
+          if (!key || !key.startsWith(eventPrefix)) continue;
+          try {
+            const event = JSON.parse(this.storage.getItem(key));
+            if (!core.validEvent(event, this.cardIds) || key !== eventPrefix + event.uid) throw Error('Invalid event');
+            events.push(event);
+          } catch (_) { warnings.push('Часть сохранённых ответов повреждена; исходные записи не удалены.'); }
+        }
+        legacyRaw = this.storage.getItem(this.prefix + 'legacy-raw') ?? (this.hasLegacy ? this.storage.getItem('pt_prog') : null) ?? '';
+        if (legacyRaw) {
+          try { legacy = core.validateLegacy(JSON.parse(legacyRaw), this.legacyKeys); }
+          catch (_) { warnings.push('Старый прогресс повреждён или несовместим. Его исходный текст сохранён отдельно в экспорте; новая тренировка доступна.'); }
+        }
+        const current = this.storage.getItem(this.prefix + 'legacy');
+        if (current) {
+          try { legacy = { ...legacy, ...core.validateLegacy(JSON.parse(current), this.legacyKeys) }; }
+          catch (_) { warnings.push('Не удалось прочитать прежние коробки; исходная запись не удалена.'); }
+        }
+        try { settings = JSON.parse(this.storage.getItem(this.prefix + 'settings') || '{}'); }
+        catch (_) { warnings.push('Настройки не прочитаны; использованы значения по умолчанию.'); }
+      } catch (_) { this.fail(); }
+      return { events, legacy, legacyRaw, settings, warnings: [...new Set(warnings)] };
+    }
+    write(key, value) {
+      try {
+        if (!this.storage) throw Error('No storage');
+        this.storage.setItem(this.prefix + key, value);
+        return true;
+      } catch (_) { this.fail(); return false; }
+    }
+    saveEvents(events) {
+      let ok = true;
+      for (const event of events) {
+        const key = this.prefix + 'event.' + this.generation + '.' + event.uid;
+        try {
+          if (!this.storage) throw Error('No storage');
+          if (this.activeGeneration() !== this.generation) throw Error('Storage restored in another tab');
+          const old = this.storage.getItem(key);
+          if (old !== null) {
+            const existing = JSON.parse(old);
+            core.mergeEvents([existing], [event]);
+          } else this.storage.setItem(key, JSON.stringify(event));
+          if (this.activeGeneration() !== this.generation) throw Error('Storage restored in another tab');
+        } catch (_) { this.fail(); ok = false; }
+      }
+      return ok;
+    }
+    replace(events, generation) {
+      // Stage first; the active pointer changes only after every event is written.
+      const old = this.generation;
+      const staged = [];
+      this.generation = generation;
+      try {
+        for (const event of events) {
+          const key = this.prefix + 'event.' + generation + '.' + event.uid;
+          this.storage.setItem(key, JSON.stringify(event)); staged.push(key);
+        }
+        this.storage.setItem(this.prefix + 'active', generation);
+      } catch (_) {
+        // An interrupted import must not fill the quota with abandoned staging.
+        try { if (this.activeGeneration() !== generation) for (const key of staged) this.storage.removeItem(key); } catch (_) {}
+        this.generation = old; this.fail(); return false;
+      }
+      // The original pt_prog is deliberately outside this cleanup.
+      try {
+        const obsolete = [];
+        for (let i = 0; i < this.storage.length; i++) {
+          const key = this.storage.key(i);
+          if (key && key.startsWith(this.prefix + 'event.') && !key.startsWith(this.prefix + 'event.' + generation + '.')) obsolete.push(key);
+        }
+        for (const key of obsolete) this.storage.removeItem(key);
+      } catch (_) { /* Committed data is usable even if old generations cannot be cleaned up. */ }
+      return true;
+    }
+    saveLegacy(legacy, raw) {
+      // Never change or remove the original pt_prog entry.
+      let ok = true;
+      ok = this.write('legacy-raw', raw || '') && ok;
+      return this.write('legacy', JSON.stringify(legacy)) && ok;
+    }
+    saveSettings(settings) { return this.write('settings', JSON.stringify(settings)); }
+  }
+  return { Store, PREFIX };
+});
+</script>
+<script>(function () {
+  'use strict';
+  const core = window.PTCards;
+  const deck = window.PT_DECK;
+  const $ = id => document.getElementById(id);
+  const cards = deck.lessons.flatMap(l => l.cards.map(c => ({ ...c, lessonId: l.id, lessonTitle: l.title, printedPage: l.printedPage, pdfPage: l.pdfPage })));
+  let storage = null;
+  try { storage = window.localStorage; } catch (_) {}
+  const store = new window.PTStore.Store(storage, deck);
+  let events = [], pending = [], legacy = {}, legacyRaw = '', warnings = [], session = null;
+  const initial = store.read();
+  function settingsFrom(value) {
+    const s = value && typeof value === 'object' && !Array.isArray(value) ? value : {};
+    return {
+      direction: s.direction === 1 ? 1 : 0,
+      mode: s.mode === 'practice' ? 'practice' : 'review',
+      answerMode: s.answerMode === 'recall' ? 'recall' : 'choice',
+      limit: [10, 20, 40].includes(s.limit) ? s.limit : 20,
+      lessons: Array.isArray(s.lessons) ? [...new Set(s.lessons.filter(n => Number.isInteger(n) && deck.lessons.some(l => l.id === n)))] : []
+    };
+  }
+  const settings = settingsFrom(initial.settings);
+  $('home-title').textContent = deck.title;
+  $('deck-detail').textContent = deck.variantLabel + ' · ' + deck.lessons.length + ' уроков · ' + cards.length + ' карточек'
+    + (deck.coverage === 'starter-selection' ? ' · начальная подборка' : '');
+  document.title = deck.title + ' — карточки';
+  function uid() {
+    return window.crypto && typeof window.crypto.randomUUID === 'function'
+      ? window.crypto.randomUUID() : Date.now().toString(36) + '_' + Math.random().toString(36).slice(2) + Math.random().toString(36).slice(2);
+  }
+  function message(text) { $('message').textContent = text; }
+  function notices() {
+    $('storage-warning').hidden = !store.error;
+    $('storage-warning').replaceChildren();
+    if (store.error) {
+      $('storage-warning').append(document.createTextNode(store.error + ' '));
+      const button = document.createElement('button');
+      button.textContent = 'Повторить сохранение';
+      button.onclick = () => {
+        sync();
+        if (store.saveEvents(pending) && store.saveLegacy(legacy, legacyRaw) && store.saveSettings(settings)) {
+          pending = []; store.error = ''; message('Данные сохранены в браузере.');
+        }
+        notices();
+      };
+      $('storage-warning').append(button);
+    }
+    $('data-warning').textContent = warnings.join(' ');
+    $('data-warning').hidden = !warnings.length;
+    const n = Object.keys(legacy).length;
+    $('legacy-note').hidden = !n;
+    $('legacy-note').textContent = 'Прежний прогресс: ' + n + ' карточек. Коробки сохранены как история. Новое расписание и оба направления проверяются с начала: в старой версии не было дат и раздельного учёта.';
+  }
+  function sync() {
+    const data = store.read();
+    try { events = core.mergeEvents(data.events, pending); }
+    catch (error) { warnings = [error.message]; notices(); return; }
+    legacy = { ...data.legacy, ...legacy };
+    legacyRaw = legacyRaw || data.legacyRaw;
+    warnings = data.warnings;
+    notices();
+  }
+  function persist(newEvents) {
+    pending = core.mergeEvents(pending, newEvents);
+    events = core.mergeEvents(events, pending);
+    if (store.saveEvents(pending)) pending = [];
+    notices();
+  }
+  function saveSettings() { store.saveSettings(settings); notices(); }
+  function dateText(at) {
+    return new Intl.DateTimeFormat('ru-RU', { dateStyle: 'short', timeStyle: 'short' }).format(new Date(at));
+  }
+  function show(screen, focus) {
+    for (const id of ['home', 'quiz', 'res']) $(id).hidden = id !== screen;
+    if (focus) $(focus).focus();
+  }
+  function selectedCards() { return cards.filter(c => settings.lessons.includes(c.lessonId)); }
+  function countText(count) { return 'Повторить: ' + count.due + ' · новых: ' + count.fresh + ' · позже: ' + count.later; }
+  function renderHome() {
+    const map = core.states(events), now = Date.now();
+    $('d0').setAttribute('aria-pressed', String(settings.direction === 0));
+    $('d1').setAttribute('aria-pressed', String(settings.direction === 1));
+    $('mode').value = settings.mode;
+    $('answer-mode').value = settings.answerMode;
+    $('limit').value = String(settings.limit);
+    $('settings-summary').textContent = (settings.mode === 'review' ? 'По расписанию' : 'Свободная тренировка')
+      + ' · ' + (settings.answerMode === 'choice' ? '4 варианта' : 'вспомнить самому') + ' · ' + settings.limit + ' карточек';
+    $('common-panel').hidden = !settings.lessons.length;
+    const selected = selectedCards();
+    $('overall').textContent = settings.lessons.length
+      ? settings.lessons.length + ' уроков · ' + countText(core.counts(selected, map, settings.direction, now))
+      : 'Отметьте уроки для общей очереди или откройте любой урок ниже.';
+    $('start-all').disabled = !selected.length;
+    $('start-all').textContent = settings.mode === 'practice' ? 'Начать свободную тренировку' : 'Начать повторение';
+    $('grid').replaceChildren();
+    for (const lesson of deck.lessons) {
+      const tile = document.createElement('div'); tile.className = 'lesson-tile';
+      const button = document.createElement('button'); button.textContent = 'Урок ' + lesson.id;
+      button.disabled = !lesson.cards.length;
+      button.onclick = () => start({ lessons: [lesson.id], label: 'Урок ' + lesson.id });
+      const title = document.createElement('div'); title.className = 'lesson-title'; title.lang = lesson.titleLang || 'pt-BR'; title.textContent = lesson.title;
+      const count = core.counts(cards.filter(c => c.lessonId === lesson.id), map, settings.direction, now);
+      const stat = document.createElement('small'); stat.textContent = lesson.cards.length ? countText(count) + ' · закреплено: ' + count.established : 'Карточки готовятся';
+      const label = document.createElement('label'); label.className = 'include';
+      const input = document.createElement('input'); input.type = 'checkbox'; input.checked = settings.lessons.includes(lesson.id); input.disabled = !lesson.cards.length;
+      input.setAttribute('aria-label', 'Урок ' + lesson.id + ' в общей очереди');
+      input.onchange = () => {
+        settings.lessons = input.checked ? [...settings.lessons, lesson.id] : settings.lessons.filter(n => n !== lesson.id);
+        saveSettings(); renderOverall();
+      };
+      label.append(input, document.createTextNode('В общей очереди'));
+      tile.append(button, title, stat, label); $('grid').append(tile);
+    }
+    notices();
+  }
+  function renderOverall() {
+    const selected = selectedCards();
+    $('common-panel').hidden = !settings.lessons.length;
+    $('overall').textContent = settings.lessons.length
+      ? settings.lessons.length + ' уроков · ' + countText(core.counts(selected, core.states(events), settings.direction, Date.now()))
+      : 'Отметьте уроки для общей очереди или откройте любой урок ниже.';
+    $('start-all').disabled = !selected.length;
+  }
+  function start(scope, mode = settings.mode, retryCards = null) {
+    sync();
+    const pool = retryCards || cards.filter(c => scope.lessons.includes(c.lessonId));
+    const queue = core.queue(pool, core.states(events), settings.direction, mode, settings.limit, Date.now());
+    if (!queue.length) {
+      const map = core.states(events);
+      const dates = pool.map(c => map.get(core.stateKey(c.id, settings.direction))?.dueAt).filter(n => n !== undefined && n !== null);
+      message('На сейчас карточек нет.' + (dates.length ? ' Ближайший повтор: ' + dateText(Math.min(...dates)) + '.' : '') + ' Можно выбрать свободную тренировку.');
+      renderHome(); show('home', 'home-title'); return;
+    }
+    session = { scope, mode, direction: settings.direction, answerMode: settings.answerMode,
+      queue, index: 0, asked: 0, right: 0, missed: new Map(), locked: false };
+    message(''); show('quiz'); question();
+  }
+  function progress() {
+    $('session-progress').textContent = 'Карточка ' + (session.index + 1) + ' из ' + session.queue.length + ' · ответов: ' + session.asked;
+    const percent = Math.round(100 * session.asked / session.queue.length);
+    $('pbar').style.width = percent + '%';
+    $('session-bar').setAttribute('aria-valuenow', String(percent));
+  }
+  function question() {
+    if (session.index >= session.queue.length) { finish(); return; }
+    session.locked = false;
+    const card = session.queue[session.index];
+    session.current = card;
+    $('session-title').textContent = session.scope.label + ' · ' + (session.direction ? 'RU → PT' : 'PT → RU') + ' · ' + (session.mode === 'review' ? 'по расписанию' : 'свободная тренировка');
+    $('source').textContent = deck.materialId + ' · урок ' + card.lessonId + (card.source
+      ? ' · источник: стр. ' + card.source.printedPage + ' / PDF ' + card.source.pdfPage
+      : ' · начало урока: стр. ' + card.printedPage + ' / PDF ' + card.pdfPage);
+    $('q').textContent = card[session.direction === 0 ? 'pt' : 'ru'];
+    $('q').lang = session.direction === 0 ? deck.language : 'ru';
+    const example = session.direction === 0 ? card.examplePt : card.exampleRu;
+    $('sense').textContent = [card.partOfSpeech, card.sense, example].filter(Boolean).join(' · ');
+    $('sense').hidden = !$('sense').textContent;
+    $('opts').replaceChildren(); $('opts').hidden = session.answerMode !== 'choice';
+    if (session.answerMode === 'choice') {
+      const pool = cards.filter(c => c.lessonId === card.lessonId);
+      for (const value of core.options(card, pool, cards, session.direction)) {
+        const button = document.createElement('button'); button.className = 'option'; button.textContent = value;
+        button.lang = session.direction === 0 ? 'ru' : deck.language;
+        button.onclick = () => answer(value === card[session.direction === 0 ? 'ru' : 'pt'], button);
+        $('opts').append(button);
+      }
+    }
+    $('recall').hidden = session.answerMode !== 'recall';
+    $('show-answer').hidden = false; $('recall-answer').hidden = true;
+    $('forgot').disabled = false; $('remembered').disabled = false;
+    $('answer-word').textContent = card[session.direction === 0 ? 'ru' : 'pt'];
+    $('answer-word').lang = session.direction === 0 ? 'ru' : deck.language;
+    $('feedback').hidden = true; $('feedback').textContent = '';
+    $('next').hidden = true;
+    $('next').textContent = session.index === session.queue.length - 1 ? 'К результатам' : 'Дальше';
+    $('keyboard-help').textContent = session.answerMode === 'choice'
+      ? 'Клавиши 1–4 — ответ. Enter или пробел вне кнопок — дальше.'
+      : 'Вспомните перевод, затем покажите ответ и оцените себя.';
+    $('reset').closest('details').hidden = session.scope.lessons.length !== 1;
+    progress(); $('q').focus();
+  }
+  function answer(ok, selected) {
+    if (!session || session.locked) return;
+    session.locked = true; session.asked++; if (ok) session.right++;
+    const card = session.current;
+    if (!ok) session.missed.set(card.id, card);
+    const correct = card[session.direction === 0 ? 'ru' : 'pt'];
+    for (const button of $('opts').children) {
+      if (button.textContent === correct) button.classList.add('good');
+      else if (button === selected) button.classList.add('bad');
+      button.disabled = true;
+    }
+    $('forgot').disabled = true; $('remembered').disabled = true;
+    let detail = 'Свободная тренировка: расписание не меняется.';
+    if (session.mode === 'review') {
+      sync();
+      const before = core.states(events).get(core.stateKey(card.id, session.direction)) || core.emptyState();
+      const event = { uid: uid(), kind: 'answer', cardId: card.id, direction: session.direction, at: Date.now(), ok };
+      const after = core.grade(before, event);
+      if (after === before) detail = 'Этот повтор уже учтён в другой вкладке. Расписание не повышено повторно.';
+      else { persist([event]); detail = 'Следующий повтор: ' + dateText(after.dueAt) + '.'; }
+    }
+    $('feedback').className = 'feedback ' + (ok ? 'good' : 'bad');
+    $('feedback').textContent = (ok ? 'Верно. ' : 'Неверно. Верный ответ: ' + correct + '. ') + detail;
+    $('feedback').hidden = false; $('next').hidden = false;
+    progress(); $('next').focus();
+  }
+  function finish() {
+    if (!session) return;
+    $('pct').textContent = session.asked ? Math.round(100 * session.right / session.asked) + '%' : '—';
+    $('result-detail').textContent = session.asked ? 'Верно ' + session.right + ' из ' + session.asked + ' ответов.' : 'Вы ещё не ответили ни на одну карточку.';
+    $('result-mode').textContent = session.mode === 'review'
+      ? 'Это точность текущей сессии. Долговременный прогресс учитывается по отдельным повторениям в разные дни.'
+      : 'Свободная тренировка не изменила даты повторения.';
+    $('missed').replaceChildren();
+    for (const card of session.missed.values()) {
+      const li = document.createElement('li'); li.textContent = card.pt + ' — ' + card.ru; $('missed').append(li);
+    }
+    $('miss-title').hidden = !session.missed.size; $('retry').hidden = !session.missed.size;
+    show('res', 'result-title');
+  }
+  function home() { sync(); renderHome(); show('home', 'home-title'); session = null; }
+  function exportProgress() {
+    sync();
+    const value = core.backup(deck.id, events, legacy, legacyRaw, Date.now());
+    const url = URL.createObjectURL(new Blob([JSON.stringify(value, null, 2)], { type: 'application/json' }));
+    const link = document.createElement('a'); link.href = url;
+    link.download = deck.id + '-progress-' + new Date().toISOString().slice(0, 10) + '.json';
+    document.body.append(link); link.click(); link.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+    message('Скачивание JSON начато. Копия включает ответы этой страницы, в том числе ещё не сохранённые в браузере.');
+  }
+  $('d0').onclick = () => { settings.direction = 0; saveSettings(); renderHome(); };
+  $('d1').onclick = () => { settings.direction = 1; saveSettings(); renderHome(); };
+  for (const [id, key, convert] of [['mode', 'mode', String], ['answer-mode', 'answerMode', String], ['limit', 'limit', Number]]) {
+    $(id).onchange = () => { settings[key] = convert($(id).value); saveSettings(); renderHome(); };
+  }
+  $('start-all').onclick = () => start({ lessons: [...settings.lessons], label: 'Общая очередь' });
+  $('next').onclick = () => { if (session && session.locked) { session.index++; question(); } };
+  $('finish').onclick = finish; $('back').onclick = home; $('tohome').onclick = home;
+  $('continue').onclick = () => start(session.scope, session.mode);
+  $('retry').onclick = () => start(session.scope, 'practice', [...session.missed.values()]);
+  $('show-answer').onclick = () => { $('show-answer').hidden = true; $('recall-answer').hidden = false; $('forgot').focus(); };
+  $('forgot').onclick = () => answer(false); $('remembered').onclick = () => answer(true);
+  $('export').onclick = exportProgress;
+  $('import').onclick = () => $('import-file').click();
+  $('import-file').onchange = async () => {
+    const file = $('import-file').files[0]; if (!file) return;
+    try {
+      if (file.size > 64 * 1024 * 1024) throw new Error('Файл больше 64 МиБ. Импорт отменён.');
+      const incoming = core.validateBackup(JSON.parse(await file.text()), deck.id, store.cardIds, store.legacyKeys);
+      sync();
+      const replace = $('import-mode').value === 'replace';
+      const combined = replace ? incoming.events : core.mergeEvents(events, incoming.events);
+      if (replace && !confirm('Заменить текущие результаты этой копией? Если нужна текущая история, сначала сохраните JSON.')) return;
+      if (replace && !store.replace(combined, uid())) throw new Error('Копия не записана. Текущие результаты оставлены без замены.');
+      legacy = replace ? incoming.legacy : { ...legacy, ...incoming.legacy };
+      legacyRaw = replace ? incoming.legacyRaw : (legacyRaw || incoming.legacyRaw);
+      if (replace) { events = combined; pending = []; }
+      else persist(incoming.events);
+      store.saveLegacy(legacy, legacyRaw);
+      sync(); renderHome();
+      message('Копия загружена: ' + combined.filter(e => e.kind === 'answer').length + ' ответов; прежних карточек: ' + Object.keys(legacy).length + '.' + (store.error ? ' Сохранение не завершено — экспортируйте JSON перед закрытием.' : ''));
+    } catch (error) { message('Импорт: ' + error.message); }
+    finally { $('import-file').value = ''; notices(); }
+  };
+  $('reset').onclick = () => {
+    if (!session || session.scope.lessons.length !== 1) return;
+    const lessonId = session.scope.lessons[0];
+    if (!confirm('Сбросить результаты урока ' + lessonId + ' в обоих направлениях и завершить сессию?')) return;
+    sync();
+    const at = Date.now();
+    const resets = cards.filter(c => c.lessonId === lessonId).flatMap(c => [0, 1].map(direction => ({ uid: uid(), kind: 'reset', cardId: c.id, direction, at, ok: null })));
+    persist(resets); home(); message('Результаты урока ' + lessonId + ' сброшены в обоих направлениях.');
+  };
+  document.addEventListener('keydown', event => {
+    if (!session || $('quiz').hidden || event.ctrlKey || event.metaKey || event.altKey || event.repeat) return;
+    if (event.target.closest('button,input,select,textarea,a,summary,[contenteditable=true]')) return;
+    if (!session.locked && session.answerMode === 'choice' && /^[1-4]$/.test(event.key)) {
+      const button = $('opts').children[Number(event.key) - 1];
+      if (button) { event.preventDefault(); button.click(); }
+    } else if (session.locked && (event.key === 'Enter' || event.key === ' ')) {
+      event.preventDefault(); $('next').click();
+    }
+  });
+  window.addEventListener('storage', event => {
+    if (event.key === null || event.key.startsWith(window.PTStore.PREFIX) || event.key === 'pt_prog') {
+      sync(); if (!$('home').hidden) renderHome();
+    }
+  });
+  window.addEventListener('focus', () => { sync(); if (!$('home').hidden) renderHome(); });
+  events = initial.events; legacy = initial.legacy; legacyRaw = initial.legacyRaw; warnings = initial.warnings;
+  if (legacyRaw) store.saveLegacy(legacy, legacyRaw);
+  renderHome();
+})();
+</script>
+</body>
+</html>
